@@ -1,6 +1,6 @@
 # YA-H-Grupp-2-REST-server-
 
-![Test](https://github.com/danieelsa/YA-H-Grupp-2-REST-server-/workflows/Python%20application/badge.svg)
+![Test](https://github.com/danieelsa/YA-H-Grupp-2-REST-server-/workflows/Test/badge.svg)
 
 ## Dependencies
 
@@ -10,8 +10,12 @@ See [requirements.txt](requirements.txt)
 
 ### How to run
 
-`env FLASK_APP=server.py flask run`
+```bash
+env FLASK_APP=server.py flask run
+```
 
 ### How to test
 
-`python test.py`
+```bash
+python test.py`
+```
