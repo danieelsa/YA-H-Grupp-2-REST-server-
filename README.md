@@ -16,4 +16,6 @@ env FLASK_APP=server.py flask run
 
 ### How to test
 
-`python test.py`
+```bash
+python test.py`
+```
