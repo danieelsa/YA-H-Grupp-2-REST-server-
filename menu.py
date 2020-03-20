@@ -2,42 +2,99 @@ import sys #this allows you to use the sys.exit command to quit/logout of the ap
 import glob
 import os
 import requests
-import server
-from server import list_files, add_file, get_file, delete_file
 
+##resp = requests.get("http://localhost:5000/files/")
+##if resp.status_code != 200:
+##    # This means something went wrong.
+##    raise ApiError('GET /tasks/ {}'.format(resp.status_code))
+##for todo_item in resp.json():
+##    print('{} {}'.format(todo_item['id'], todo_item['summary']))
 
-def main():
+def _url(path):
+        return "http://localhost:5000" + path
 
-        menu()
+def download_file(filename):
+        response = requests.get(_url('/files/{}'.format(filename)))
+        with open(filename, 'w+') as f:
+            f.write(response.text)
+            f.close()
+        return response
 
-def menu():
+def upload_file(filename):
+        #check if file exists
+        #If ok do open(file)
+        #If not ok return bad status
+        with open(filename, 'r') as f:
+            upload_data = f.read()
+            f.close()
+            return requests.put(_url('/files/{}'.format(filename)),
+                                data=upload_data
+                                )
+
+def list_files():
+        response = requests.get(_url('/files'))
+        return response
+
+def delete_file(filename):
+        return requests.delete(_url('/files/{}'.format(filename)))
+
+def print_menu():
     print()
     print("************MAIN MENU**************")
-
-
-    choice = input("""
+    menu_text = """
         1: List all files
         2: Add a file
         3: Download a file
         4: Delete a file
         Q: Quit
 
-        Please enter your choice: """)
+        """
+    print(menu_text)
+
+def main():
+    print_menu()
+    status = 0
+    while (status == 0):
+        status = menu()
+
+def menu():
+    choice = input("Please enter your choice: ")
 
     if choice == "1":
-        server.list_files()
+        resp = list_files()
+        print()
+        print("**files on server**")
+        files = resp.json()
+        for file in files:
+            print(file)
+        if resp.status_code != 200:
+                print("Could not execute your request")
+        return 0
     elif choice == "2":
-        server.add_file()
+        filename = input("Please enter filename: ")
+        resp = upload_file(filename)
+        print(resp)
+        return 0
+        
     elif choice == "3":
-        server.get_file()
+        filename = input("Please enter filename: ")
+        download_file(filename)
+        return 0
     elif choice == "4":
-        server.delete_file()
+        filename = input("Please enter filename: ")
+        delete_file(filename)
+        return 0
     elif choice=="Q" or choice=="q":
-        sys.exit
+        return 1
+    elif choice=="H" or choice=="h":
+        print_menu()
+        return 0
     else:
         print("You can only select 1, 2, 3, 4 or Q")
         print("Please try again")
-        menu()
+        return 0
+
+        
 
 ##def enterfilename():
 ##    # asks user for filename
@@ -95,4 +152,5 @@ def menu():
 ##
 ##menu()
 
-main()
+if __name__== "__main__":
+  main()
