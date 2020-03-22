@@ -27,14 +27,14 @@ class TestServerMethods(unittest.TestCase):
     
     
     def test_delete_file1(self):
-        # get name of an excicting file on server.   
+        # delete an existing file on server.   
         output = server.delete_file("file_on_server.txt")
         
         self.assertEqual(output, ('', 200))
        
     
     def test_delete_file2(self):
-        # get name of non-excicting file on server.
+        # delete an non-existing file on server.
         output = server.delete_file("file/document/not_a_file_on_server.txt")
         
         self.assertEqual(output, ('', 404))
