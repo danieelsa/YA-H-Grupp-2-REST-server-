@@ -40,5 +40,12 @@ class TestServerMethods(unittest.TestCase):
         self.assertEqual(output, ('', 404))
 
 
+    def test_get_file1(self):
+        # get an existing file on server
+        output = server.get_file("file_on_server.txt")
+        
+        # VAD SKA DET STÅ HÄR???
+        
+        
 if __name__ == '__main__':
     unittest.main()
