@@ -24,6 +24,8 @@ def upload_file(filename):
         #check if file exists
         #If ok do open(file)
         #If not ok return bad status
+
+        
         with open(filename, 'r') as f:
             upload_data = f.read()
             f.close()
@@ -70,22 +72,35 @@ def menu():
         if resp.status_code != 200:
                 print("Could not execute your request")
         return 0
+
+
     elif choice == "2":
-        filename = input("Please enter filename: ")
-        resp = upload_file(filename)
-        print(resp)
+        filename = input("Please enter filename.txt: ")
+
+##    # opens user inputted filename ".txt" and (w+) creates new file if it dont already exists
+        with open(filename, 'w+') as f:
+            f.close()
+
+
+
+            resp = upload_file(filename)
+ ##       print(resp)
         return 0
         
     elif choice == "3":
         filename = input("Please enter filename: ")
         download_file(filename)
         return 0
+
+
     elif choice == "4":
         filename = input("Please enter filename: ")
         delete_file(filename)
         return 0
+
     elif choice=="Q" or choice=="q":
         return 1
+
     elif choice=="H" or choice=="h":
         print_menu()
         return 0

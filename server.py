@@ -17,6 +17,8 @@ def get_file(path):
 def add_file(filename):
     """Upload a file."""
 
+
+
     if "/" in filename:
         # Return 400 BAD REQUEST
         abort(400, "no subdirectories directories allowed")
