@@ -25,7 +25,7 @@ run-client:
     $(LANGUAGE) $(CLIENT_PATH)$(CLIENT_FILE)
   
 test-all:
-    @touch file_on_server.txt
+    @touch "bla bla bla..." > file_on_server.txt
     @echo "file_on_server.txt has been created"
     $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
     @rm file_on_server.txt
