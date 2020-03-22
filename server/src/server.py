@@ -17,6 +17,8 @@ def get_file(path):
 def add_file(filename):
     """Upload a file."""
 
+
+
     if "/" in filename:
         # Return 400 BAD REQUEST
         abort(400, "no subdirectories directories allowed")
@@ -52,7 +54,7 @@ def list_files():
         path = os.path.join(UPLOAD_DIRECTORY, filename)
         if os.path.isfile(path):
             files.append(filename)
-    return jsonify(files)
+    return jsonify(files), 200
 
 
 if __name__ == '__main__':
