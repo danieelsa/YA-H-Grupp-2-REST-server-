@@ -12,10 +12,33 @@ CLIENT_FILE = menu.py
 TEST_PATH = server/tests/
 TEST_FILE = test.py
 
-all: run-all test-all
+all: @echo $(OSFLAG)
+     run-all test-all
+
+# Detect operating system in Makefile
+OSFLAG :=
+    ifeq ($(OS), Windows_NT) # XP, 2000, 7, Vista, 10
+        detected_OS := Windows
+    else
+        detected_OS := $(shell uname)
+    endif
+    
+    ifeq ($(detected_OS), Windows)
+        OS_FLAG += -D WIN32
+    endif
+    ifeq ($(detected_OS), Darwin)   # Mac OS X
+        OSFLAG += -D OSX
+    endif
+    ifeq ($(detected_OS), Linux)
+        OS_FLAG += -D LINUX
+    endif
 
 run-all:
-    env FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
+    ifeq ($(detected_OS), Windows)
+        set env FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
+    else
+        export env FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
+    endif
     $(LANGUAGE) $(CLIENT_PATH)$(CLIENT_FILE)
   
 run-server:
