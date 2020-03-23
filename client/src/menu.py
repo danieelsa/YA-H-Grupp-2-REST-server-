@@ -2,6 +2,7 @@ import sys  # this allows you to use the sys.exit command to quit/logout of the 
 import glob
 import requests
 from pathlib import Path
+import os
 
 LOCAL_DIRECTORY = Path(__file__).parent.parent / "files"
 
@@ -22,17 +23,19 @@ def download_file(filename):
 
 def upload_file(filename):
     file_path = LOCAL_DIRECTORY / filename
+    status=0
 
-    if not Path(file_path).exists():
-        return 0
 
-    with open(file_path, 'r') as f:
+    with open(file_path, 'w+') as f:
         upload_data = f.read()
         f.close()
-        return requests.put(_url('/files/{}'.format(filename)),
+        
+        status=requests.put(_url('/files/{}'.format(filename)),
                             data=upload_data
                             ).status_code
-
+    if status==201:
+        os.remove(file_path)
+    return status
 
 def list_files():
     response = requests.get(_url('/files'))
