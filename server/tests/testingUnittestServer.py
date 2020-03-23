@@ -1,5 +1,9 @@
 import unittest
-import server
+import os
+import sys
+#import src.server
+from server.src import server
+
 
 class TestServerMethods(unittest.TestCase):
 
