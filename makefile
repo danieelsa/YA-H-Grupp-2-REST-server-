@@ -35,9 +35,9 @@ OSFLAG :=
 
 run-all:
     ifeq ($(detected_OS), Windows)
-        set env FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
+        set FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
     else
-        export env FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
+        export FLASK_APP = $(SERVER_PATH)$(SERVER_FILE) flask run
     endif
     $(LANGUAGE) $(CLIENT_PATH)$(CLIENT_FILE)
   
