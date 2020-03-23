@@ -44,7 +44,7 @@ class TestServerMethods(unittest.TestCase):
         # get an existing file on server
         output = server.get_file("file_on_server.txt")
         
-        # VAD SKA DET STÅ HÄR???
+        output.status_code == 200
         
         
 if __name__ == '__main__':
