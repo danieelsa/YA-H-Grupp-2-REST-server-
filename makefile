@@ -12,11 +12,10 @@ CLIENT_FILE = menu.py
 TEST_PATH = server/tests/
 TEST_FILE = test.py
 
-all: @echo $(OSFLAG)
-     run-all test-all
+all: detected_OS run-all test-all
 
 # Detect operating system in Makefile
-detected_OS :=
+detected_OS:
     ifeq ($(OS), Windows_NT) # XP, 2000, 7, Vista, 10
         detected_OS := Windows
     else
