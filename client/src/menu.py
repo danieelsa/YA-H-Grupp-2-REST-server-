@@ -1,44 +1,56 @@
-import sys #this allows you to use the sys.exit command to quit/logout of the application
+import sys  # this allows you to use the sys.exit command to quit/logout of the application
 import glob
-import os
 import requests
+from pathlib import Path
 
-##resp = requests.get("http://localhost:5000/files/")
-##if resp.status_code != 200:
-##    # This means something went wrong.
-##    raise ApiError('GET /tasks/ {}'.format(resp.status_code))
-##for todo_item in resp.json():
-##    print('{} {}'.format(todo_item['id'], todo_item['summary']))
+LOCAL_DIRECTORY = Path(__file__).parent.parent / "files"
 
 def _url(path):
-        return "http://localhost:5000" + path
+    return "http://localhost:5000" + path
+
 
 def download_file(filename):
-        response = requests.get(_url('/files/{}'.format(filename)))
-        with open(filename, 'w+') as f:
-            f.write(response.text)
-            f.close()
-        return response
+    response = requests.get(_url('/files/{}'.format(filename)))
+    print(response.status_code)
+    if response.status_code != 200:
+        return response.status_code
+    with open(LOCAL_DIRECTORY / filename, 'w+') as f:
+        f.write(response.text)
+        f.close()
+    return response.status_code
+
 
 def upload_file(filename):
-        #check if file exists
-        #If ok do open(file)
-        #If not ok return bad status
+    file_path = LOCAL_DIRECTORY / filename
 
-        
-        with open(filename, 'r') as f:
-            upload_data = f.read()
-            f.close()
-            return requests.put(_url('/files/{}'.format(filename)),
-                                data=upload_data
-                                )
+    if not Path(file_path).exists():
+        return 0
+
+    with open(file_path, 'r') as f:
+        upload_data = f.read()
+        f.close()
+        return requests.put(_url('/files/{}'.format(filename)),
+                            data=upload_data
+                            ).status_code
+
 
 def list_files():
-        response = requests.get(_url('/files'))
-        return response
+    response = requests.get(_url('/files'))
+    if response.status_code != 200:
+        print("Could not execute your request")
+        return response.status_code
+
+    print()
+    print("**files on server**")
+    files = response.json()
+    for file in files:
+        print(file)
+    return response.status_code
+
 
 def delete_file(filename):
-        return requests.delete(_url('/files/{}'.format(filename)))
+    return requests.delete(_url('/files/{}'.format(filename))).status_code
+
 
 def print_menu():
     print()
@@ -48,10 +60,12 @@ def print_menu():
         2: Add a file
         3: Download a file
         4: Delete a file
+        H: Print menu
         Q: Quit
 
         """
     print(menu_text)
+
 
 def main():
     print_menu()
@@ -59,49 +73,54 @@ def main():
     while (status == 0):
         status = menu()
 
+
 def menu():
     choice = input("Please enter your choice: ")
 
     if choice == "1":
-        resp = list_files()
-        print()
-        print("**files on server**")
-        files = resp.json()
-        for file in files:
-            print(file)
-        if resp.status_code != 200:
-                print("Could not execute your request")
+        list_files()
         return 0
-
 
     elif choice == "2":
         filename = input("Please enter filename.txt: ")
+        resp = upload_file(filename)
 
-##    # opens user inputted filename ".txt" and (w+) creates new file if it dont already exists
-        with open(filename, 'w+') as f:
-            f.close()
-
-
-
-            resp = upload_file(filename)
- ##       print(resp)
+        if resp == 201:
+            print("Success!")
+        elif resp == 0:
+            print("Could not find file!")
+        else:
+            print("Failed to upload file!")
         return 0
-        
+
     elif choice == "3":
         filename = input("Please enter filename: ")
-        download_file(filename)
-        return 0
+        resp = download_file(filename)
 
+        if resp == 200:
+            print("Success!")
+        else:
+            print("Failed to find file on server!")
+        return 0
 
     elif choice == "4":
         filename = input("Please enter filename: ")
-        delete_file(filename)
+        resp = delete_file(filename)
+
+        if resp == 200:
+            print("Success!")
+
+        elif resp == 404:
+            print("Could not find file!")
+
+        else:
+            print("Unknown response!")
         return 0
 
-    elif choice=="Q" or choice=="q":
+    elif choice == "Q" or choice == "q":
         return 1
 
-    elif choice=="H" or choice=="h":
+    elif choice == "H" or choice == "h":
         print_menu()
         return 0
     else:
@@ -109,63 +128,5 @@ def menu():
         print("Please try again")
         return 0
 
-        
-
-##def enterfilename():
-##    # asks user for filename
-##    filename = input("Insert 'filename.txt' >>> ")
-##    # opens user inputted filename ".txt" and (w+) creates new file if it dont already exists
-##    with open(filename, 'w+') as f:
-##        f.close()
-##        print("File created")
-##        menu()
-##
-##
-##def listfiles():
-##    myFiles = glob.glob('*.txt')
-##    print(myFiles)
-##    print()
-##
-##    pass        
-##    menu()
-##        
-##
-##def downloadfile():
-##    myFiles = glob.glob('*.txt')
-##    print(myFiles)
-##    print()
-##    filename = input("Enter name of file you want to download: >>> ")
-##      # checking whether file exists or not
-##    if  os.path.exists(filename):
-##        f=open(filename, 'w+')
-##        f.close()
-##        print("File downloaded")
-##    else:
-##    # file not found message
-##        print("File not found in the directory")
-##    pass
-##    
-##
-##
-##
-##def deletefile():
-##    myFiles = glob.glob('*.txt')
-##    print()
-##   # print("Enter name of file you want to delete")
-##    print(myFiles)
-##    filename = input("Enter name of file you want to delete: ")
-##    # checking whether file exists or not
-##    if  os.path.exists(filename):
-##        os.remove(filename)
-##        print("File deleted")
-##    else:
-##    # file not found message
-##        print("File not found in the directory")
-##    
-##    menu()    
-##    
-##
-##menu()
-
-if __name__== "__main__":
-  main()
+if __name__ == "__main__":
+    main()
