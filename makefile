@@ -56,9 +56,8 @@ test-all:
 #    @echo "file_on_server.txt has been deleted"
 
 test-server:
-    $(LANGUAGE) -m unittest
-    server.tests.test
-    $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
+    $(LANGUAGE) -m unittest server.tests.test
+#    $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
 
 clean:
     @echo "Cleaning up on the server..."
