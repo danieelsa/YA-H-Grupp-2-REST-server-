@@ -48,14 +48,16 @@ run-client:
     $(LANGUAGE) $(CLIENT_PATH)$(CLIENT_FILE)
   
 test-all:
-    @touch "bla bla bla..." > file_on_server.txt
-    @echo "file_on_server.txt has been created"
-    $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
-    @rm file_on_server.txt
-    @echo "file_on_server.txt has been deleted"
+    test-server
+#    @touch "bla bla bla..." > file_on_server.txt
+#    @echo "file_on_server.txt has been created"
+#    $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
+#    @rm file_on_server.txt
+#    @echo "file_on_server.txt has been deleted"
 
 test-server:
     $(LANGUAGE) -m unittest
+    $(TEST_PATH).test
     $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
 
 clean:
