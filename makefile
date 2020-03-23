@@ -16,22 +16,22 @@ all: @echo $(OSFLAG)
      run-all test-all
 
 # Detect operating system in Makefile
-OSFLAG :=
+detected_OS :=
     ifeq ($(OS), Windows_NT) # XP, 2000, 7, Vista, 10
         detected_OS := Windows
     else
         detected_OS := $(shell uname)
     endif
     
-    ifeq ($(detected_OS), Windows)
-        OS_FLAG += -D WIN32
-    endif
-    ifeq ($(detected_OS), Darwin)   # Mac OS X
-        OSFLAG += -D OSX
-    endif
-    ifeq ($(detected_OS), Linux)
-        OS_FLAG += -D LINUX
-    endif
+#    ifeq ($(detected_OS), Windows)
+#        OS_FLAG += -D WIN32
+#    endif
+#    ifeq ($(detected_OS), Darwin)   # Mac OS X
+#        OSFLAG += -D OSX
+#    endif
+#    ifeq ($(detected_OS), Linux)
+#        OS_FLAG += -D LINUX
+#    endif
 
 run-all:
     ifeq ($(detected_OS), Windows)
