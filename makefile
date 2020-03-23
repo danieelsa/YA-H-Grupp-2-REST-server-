@@ -21,7 +21,8 @@ detected_OS:
     else
         detected_OS := $(shell uname)
     endif
-    
+
+# You only need this for C-code, not for Python
 #    ifeq ($(detected_OS), Windows)
 #        OS_FLAG += -D WIN32
 #    endif
