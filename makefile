@@ -57,7 +57,7 @@ test-all:
 
 test-server:
     $(LANGUAGE) -m unittest
-    $(TEST_PATH).test
+    server.tests.test
     $(LANGUAGE) $(TEST_PATH)$(TEST_FILE)
 
 clean:
