@@ -12,7 +12,7 @@ def _url(path):
 
 def download_file(filename):
     response = requests.get(_url('/files/{}'.format(filename)))
-    print(response.status_code)
+    #print(response.status_code)
     if response.status_code != 200:
         return response.status_code
     with open(LOCAL_DIRECTORY / filename, 'w+') as f:
@@ -44,10 +44,10 @@ def list_files():
         return response.status_code
 
     print()
-    print("**files on server**")
+    print("** Files on server **")
     files = response.json()
     for file in files:
-        print(file)
+        print("   " + file)
     return response.status_code
 
 
@@ -89,7 +89,7 @@ def menu():
         resp = upload_file(filename)
 
         if resp == 201:
-            print("Success!")
+            print("File uploaded!")
         elif resp == 0:
             print("Could not find file!")
         else:
@@ -101,7 +101,7 @@ def menu():
         resp = download_file(filename)
 
         if resp == 200:
-            print("Success!")
+            print("File downloaded!")
         else:
             print("Failed to find file on server!")
         return 0
@@ -111,7 +111,7 @@ def menu():
         resp = delete_file(filename)
 
         if resp == 200:
-            print("Success!")
+            print("File deleted!")
 
         elif resp == 404:
             print("Could not find file!")
